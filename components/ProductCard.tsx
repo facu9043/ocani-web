@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Product } from "@/lib/data/products";
 import { formatPrice } from "@/lib/format";
 import { useCartStore } from "@/lib/store/cart";
@@ -25,21 +26,31 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-forest-dark/10 bg-cream shadow-sm transition-transform hover:-translate-y-0.5">
       <div className="relative flex aspect-square items-center justify-center bg-sage">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          className="h-12 w-12 text-forest/70"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 21c-4.5-2-8-6-8-10.5A6.5 6.5 0 0 1 12 4a6.5 6.5 0 0 1 8 6.5C20 15 16.5 19 12 21Zm0 0V9"
+        {product.imageUrl ? (
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            sizes="(min-width: 1280px) 22vw, (min-width: 640px) 30vw, 45vw"
+            className="object-cover"
           />
-        </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            className="h-12 w-12 text-forest/70"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 21c-4.5-2-8-6-8-10.5A6.5 6.5 0 0 1 12 4a6.5 6.5 0 0 1 8 6.5C20 15 16.5 19 12 21Zm0 0V9"
+            />
+          </svg>
+        )}
 
         {!product.inStock && (
           <span className="absolute top-3 left-3 rounded-full bg-forest-dark px-2.5 py-1 text-[11px] font-semibold text-cream">

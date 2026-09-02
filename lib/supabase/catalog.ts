@@ -7,7 +7,7 @@ export async function getCatalog(): Promise<{ products: Product[]; categories: s
       supabase.from("categories").select("id, name, sort_order").order("sort_order"),
       supabase
         .from("products")
-        .select("id, name, category_id, unit, price, in_stock")
+        .select("id, name, category_id, unit, price, in_stock, image_url")
         .order("name"),
     ]);
 
@@ -23,6 +23,7 @@ export async function getCatalog(): Promise<{ products: Product[]; categories: s
     unit: row.unit,
     price: Number(row.price),
     inStock: row.in_stock,
+    imageUrl: row.image_url,
   }));
 
   const categories = (categoryRows ?? []).map((category) => category.name);

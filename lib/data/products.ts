@@ -9,6 +9,7 @@ export type Product = {
   unit: string;
   price: number;
   inStock: boolean;
+  imageUrl: string | null;
 };
 
 export const CATEGORIES = [
@@ -29,7 +30,7 @@ export const CATEGORIES = [
   "Snacks",
 ] as const;
 
-const RAW_PRODUCTS: Omit<Product, "id">[] = [
+const RAW_PRODUCTS: Omit<Product, "id" | "imageUrl">[] = [
   { category: "Cereales", name: "Almohaditas de Avellana (Lasfor)", unit: "Bulto 2.5kg", price: 19000, inStock: true },
   { category: "Cereales", name: "Almohaditas de Limón (Lasfor)", unit: "Bulto 2.5kg", price: 19000, inStock: true },
   { category: "Cereales", name: "Almohaditas de Frutilla (Lasfor)", unit: "Bulto 2.5kg", price: 19000, inStock: true },
@@ -139,5 +140,6 @@ const RAW_PRODUCTS: Omit<Product, "id">[] = [
 
 export const PRODUCTS: Product[] = RAW_PRODUCTS.map((product, index) => ({
   id: `p${index + 1}`,
+  imageUrl: null,
   ...product,
 }));
