@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forest-dark: #283618;
+  --color-forest: #606c38;
+  --color-forest-light: #7c8a4a;
+  --color-sage: #e4dfb8;
+  --color-cream: #fefae0;
+  --color-gold: #dda15e;
+  --color-rust: #bc6c25;
+  --color-ink: #3a2e1c;
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes cart-bump {
+    0% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.35);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animate-cart-bump {
+    animation: cart-bump 0.35s ease-out;
+  }
+}
