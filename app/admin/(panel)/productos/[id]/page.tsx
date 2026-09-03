@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { updateProduct } from "@/lib/actions/products";
 import ProductForm from "@/components/admin/ProductForm";
 
@@ -13,6 +13,7 @@ export default async function EditProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const supabaseAdmin = getSupabaseAdmin();
 
   const [{ data: categories }, { data: product }] = await Promise.all([
     supabaseAdmin.from("categories").select("id, name").order("sort_order"),

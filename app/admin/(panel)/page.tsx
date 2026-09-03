@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = { title: "Panel" };
 
 export default async function AdminDashboardPage() {
+  const supabaseAdmin = getSupabaseAdmin();
   const [{ count: totalProducts }, { count: outOfStock }, { count: totalCategories }] =
     await Promise.all([
       supabaseAdmin.from("products").select("id", { count: "exact", head: true }),

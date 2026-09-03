@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { createProduct } from "@/lib/actions/products";
 import ProductForm from "@/components/admin/ProductForm";
 
 export const metadata: Metadata = { title: "Nuevo producto" };
 
 export default async function NewProductPage() {
+  const supabaseAdmin = getSupabaseAdmin();
   const { data: categories } = await supabaseAdmin
     .from("categories")
     .select("id, name")

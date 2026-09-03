@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/require-user";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export type SettingsFormState = { error: string | null; success?: boolean };
 
@@ -11,6 +11,7 @@ export async function updateSettings(
   formData: FormData,
 ): Promise<SettingsFormState> {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
 
   const whatsapp_number = String(formData.get("whatsapp_number") ?? "").trim();
   const business_hours = String(formData.get("business_hours") ?? "").trim();

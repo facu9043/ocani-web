@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/supabase/require-user";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import type { Database } from "@/types/supabase";
 
 export type ProductFormState = { error: string | null };
@@ -13,6 +13,7 @@ type ProductUpdate = Database["public"]["Tables"]["products"]["Update"];
 async function uploadImageIfProvided(file: File | null): Promise<string | null> {
   if (!file || file.size === 0) return null;
 
+  const supabaseAdmin = getSupabaseAdmin();
   const ext = file.name.split(".").pop() || "jpg";
   const path = `${crypto.randomUUID()}.${ext}`;
 
@@ -50,6 +51,7 @@ export async function createProduct(
   formData: FormData,
 ): Promise<ProductFormState> {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
 
   try {
     const fields = parseProductFields(formData);
@@ -81,6 +83,7 @@ export async function updateProduct(
   formData: FormData,
 ): Promise<ProductFormState> {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
 
   try {
     const fields = parseProductFields(formData);
@@ -109,6 +112,7 @@ export async function updateProduct(
 
 export async function deleteProduct(id: string) {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
   const { error } = await supabaseAdmin.from("products").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/productos");

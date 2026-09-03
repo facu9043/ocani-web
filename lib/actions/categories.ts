@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/require-user";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { slugify } from "@/lib/slug";
 
 export type CategoryFormState = { error: string | null };
@@ -12,6 +12,7 @@ export async function createCategory(
   formData: FormData,
 ): Promise<CategoryFormState> {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return { error: "El nombre es obligatorio." };
 
@@ -37,6 +38,7 @@ export async function createCategory(
 
 export async function renameCategory(id: string, name: string) {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
   if (!name.trim()) throw new Error("El nombre es obligatorio.");
 
   const { error } = await supabaseAdmin
@@ -51,6 +53,7 @@ export async function renameCategory(id: string, name: string) {
 
 export async function deleteCategory(id: string) {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { count } = await supabaseAdmin
     .from("products")
@@ -69,6 +72,7 @@ export async function deleteCategory(id: string) {
 
 export async function moveCategory(id: string, direction: "up" | "down") {
   await requireUser();
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: categories, error } = await supabaseAdmin
     .from("categories")

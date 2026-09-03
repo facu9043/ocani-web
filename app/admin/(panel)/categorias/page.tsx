@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import CategoryRow from "@/components/admin/CategoryRow";
 import NewCategoryForm from "@/components/admin/NewCategoryForm";
 
 export const metadata: Metadata = { title: "Categorías" };
 
 export default async function AdminCategoriesPage() {
+  const supabaseAdmin = getSupabaseAdmin();
   const { data: categories } = await supabaseAdmin
     .from("categories")
     .select("id, name")

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { formatPrice } from "@/lib/format";
 import { deleteProduct } from "@/lib/actions/products";
 import DeleteButton from "@/components/admin/DeleteButton";
@@ -14,6 +14,7 @@ export default async function AdminProductsPage({
   searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const { category, q } = await searchParams;
+  const supabaseAdmin = getSupabaseAdmin();
 
   const [{ data: categories }, productsQuery] = await Promise.all([
     supabaseAdmin.from("categories").select("id, name").order("sort_order"),

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import SettingsForm from "@/components/admin/SettingsForm";
 
 export const metadata: Metadata = { title: "Configuración" };
 
 export default async function AdminSettingsPage() {
+  const supabaseAdmin = getSupabaseAdmin();
   const { data: settings } = await supabaseAdmin
     .from("site_settings")
     .select("whatsapp_number, business_hours, address, instagram_url, about_text")
