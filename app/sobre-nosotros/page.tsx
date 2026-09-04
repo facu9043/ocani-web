@@ -181,16 +181,15 @@ export default async function SobreNosotrosPage() {
 
       <div className="mt-10 max-w-3xl space-y-4 text-ink/70">
         <p>
-          Empezamos como una dietética de barrio y hoy despachamos a todo el país,
-          siempre con el mismo criterio: buena calidad, buen precio y trato directo.
-          Trabajamos con una selección amplia de frutos secos, semillas, harinas,
-          avena, condimentos y productos naturales, pensada tanto para quien revende
-          como para quien cocina en casa.
+          En Ocani trabajamos para brindar a nuestros clientes productos
+          seleccionados y un servicio cercano, confiable y responsable. Nuestro
+          objetivo es que cada compra sea una experiencia simple y satisfactoria.
         </p>
         <p>
-          Pedís por WhatsApp o Instagram, te confirmamos el pedido y lo mandamos a
-          donde estés — con envíos a todo el país y precios mayoristas a partir de
-          1 kg por producto o bulto cerrado.
+          Nos apasiona lo que hacemos y buscamos crecer junto a nuestros clientes,
+          acompañando tanto a quienes eligen nuestros productos para su consumo
+          diario como a emprendedores, comercios y negocios que buscan un
+          proveedor confiable.
         </p>
       </div>
 
