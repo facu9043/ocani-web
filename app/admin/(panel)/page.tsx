@@ -6,15 +6,26 @@ export const metadata: Metadata = { title: "Panel" };
 
 export default async function AdminDashboardPage() {
   const supabaseAdmin = getSupabaseAdmin();
-  const [{ count: totalProducts }, { count: outOfStock }, { count: totalCategories }] =
-    await Promise.all([
-      supabaseAdmin.from("products").select("id", { count: "exact", head: true }),
-      supabaseAdmin
-        .from("products")
-        .select("id", { count: "exact", head: true })
-        .eq("in_stock", false),
-      supabaseAdmin.from("categories").select("id", { count: "exact", head: true }),
-    ]);
+  const [
+    { count: totalProducts, error: totalProductsError },
+    { count: outOfStock, error: outOfStockError },
+    { count: totalCategories, error: totalCategoriesError },
+  ] = await Promise.all([
+    supabaseAdmin.from("products").select("id", { count: "exact", head: true }),
+    supabaseAdmin
+      .from("products")
+      .select("id", { count: "exact", head: true })
+      .eq("in_stock", false),
+    supabaseAdmin.from("categories").select("id", { count: "exact", head: true }),
+  ]);
+
+  if (totalProductsError || outOfStockError || totalCategoriesError) {
+    console.error("[admin] dashboard counts failed:", {
+      totalProductsError,
+      outOfStockError,
+      totalCategoriesError,
+    });
+  }
 
   const stats = [
     { label: "Productos", value: totalProducts ?? 0, href: "/admin/productos" },
