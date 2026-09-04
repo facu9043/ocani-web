@@ -125,7 +125,10 @@ const CATEGORIES = [
 ];
 
 export default async function SobreNosotrosPage() {
-  const settings = await getSiteSettings().catch(() => null);
+  const settings = await getSiteSettings().catch((error) => {
+    console.error("[sobre-nosotros] getSiteSettings failed:", error);
+    return null;
+  });
   const aboutText = settings?.about_text || FALLBACK_ABOUT_TEXT;
 
   return (

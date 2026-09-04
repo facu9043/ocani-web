@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 async function loadCatalog() {
   try {
     return await getCatalog();
-  } catch {
+  } catch (error) {
+    console.error("[catalogo] getCatalog failed:", error);
     return null;
   }
 }

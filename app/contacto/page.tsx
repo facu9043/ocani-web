@@ -18,7 +18,10 @@ const FALLBACK = {
 };
 
 export default async function ContactoPage() {
-  const settings = await getSiteSettings().catch(() => null);
+  const settings = await getSiteSettings().catch((error) => {
+    console.error("[contacto] getSiteSettings failed:", error);
+    return null;
+  });
 
   const whatsappNumber = settings?.whatsapp_number || FALLBACK.whatsapp_number;
   const businessHours = settings?.business_hours || FALLBACK.business_hours;
