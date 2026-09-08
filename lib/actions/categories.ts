@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/require-user";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { slugify } from "@/lib/slug";
+import { SITE_ID } from "@/lib/site";
 
 export type CategoryFormState = { error: string | null };
 
@@ -19,11 +20,13 @@ export async function createCategory(
   const { data: existing } = await supabaseAdmin
     .from("categories")
     .select("sort_order")
+    .eq("site_id", SITE_ID)
     .order("sort_order", { ascending: false })
     .limit(1);
   const nextOrder = (existing?.[0]?.sort_order ?? -1) + 1;
 
   const { error } = await supabaseAdmin.from("categories").insert({
+    site_id: SITE_ID,
     name,
     slug: slugify(name),
     sort_order: nextOrder,
@@ -44,7 +47,8 @@ export async function renameCategory(id: string, name: string) {
   const { error } = await supabaseAdmin
     .from("categories")
     .update({ name: name.trim(), slug: slugify(name) })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("site_id", SITE_ID);
 
   if (error) throw new Error(error.message);
   revalidatePath("/admin/categorias");
@@ -58,13 +62,18 @@ export async function deleteCategory(id: string) {
   const { count } = await supabaseAdmin
     .from("products")
     .select("id", { count: "exact", head: true })
-    .eq("category_id", id);
+    .eq("category_id", id)
+    .eq("site_id", SITE_ID);
 
   if (count && count > 0) {
     throw new Error(`No se puede borrar: hay ${count} producto(s) en esta categoría.`);
   }
 
-  const { error } = await supabaseAdmin.from("categories").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("categories")
+    .delete()
+    .eq("id", id)
+    .eq("site_id", SITE_ID);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/categorias");
   revalidatePath("/catalogo");
@@ -77,6 +86,7 @@ export async function moveCategory(id: string, direction: "up" | "down") {
   const { data: categories, error } = await supabaseAdmin
     .from("categories")
     .select("id, sort_order")
+    .eq("site_id", SITE_ID)
     .order("sort_order");
   if (error) throw new Error(error.message);
 

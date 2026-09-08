@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { SITE_ID } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Panel" };
 
@@ -11,12 +12,19 @@ export default async function AdminDashboardPage() {
     { count: outOfStock, error: outOfStockError },
     { count: totalCategories, error: totalCategoriesError },
   ] = await Promise.all([
-    supabaseAdmin.from("products").select("id", { count: "exact", head: true }),
     supabaseAdmin
       .from("products")
       .select("id", { count: "exact", head: true })
+      .eq("site_id", SITE_ID),
+    supabaseAdmin
+      .from("products")
+      .select("id", { count: "exact", head: true })
+      .eq("site_id", SITE_ID)
       .eq("in_stock", false),
-    supabaseAdmin.from("categories").select("id", { count: "exact", head: true }),
+    supabaseAdmin
+      .from("categories")
+      .select("id", { count: "exact", head: true })
+      .eq("site_id", SITE_ID),
   ]);
 
   if (totalProductsError || outOfStockError || totalCategoriesError) {

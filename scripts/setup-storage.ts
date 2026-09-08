@@ -20,7 +20,7 @@ if (!supabaseUrl || !serviceRoleKey) {
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
 async function main() {
-  const { error } = await supabase.storage.createBucket("productos", {
+  const { error } = await supabase.storage.createBucket("product-images", {
     public: true,
     fileSizeLimit: "5MB",
     allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],
@@ -30,7 +30,7 @@ async function main() {
     throw error;
   }
 
-  console.log("Bucket 'productos' listo.");
+  console.log("Bucket 'product-images' listo.");
 }
 
 main().catch((error) => {

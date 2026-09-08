@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { createProduct } from "@/lib/actions/products";
+import { SITE_ID } from "@/lib/site";
 import ProductForm from "@/components/admin/ProductForm";
 
 export const metadata: Metadata = { title: "Nuevo producto" };
@@ -11,6 +12,7 @@ export default async function NewProductPage() {
   const { data: categories } = await supabaseAdmin
     .from("categories")
     .select("id, name")
+    .eq("site_id", SITE_ID)
     .order("sort_order");
 
   return (

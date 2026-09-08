@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/supabase/require-user";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { SITE_ID } from "@/lib/site";
 import type { Database } from "@/types/supabase";
 
 export type ProductFormState = { error: string | null };
@@ -15,16 +16,16 @@ async function uploadImageIfProvided(file: File | null): Promise<string | null> 
 
   const supabaseAdmin = getSupabaseAdmin();
   const ext = file.name.split(".").pop() || "jpg";
-  const path = `${crypto.randomUUID()}.${ext}`;
+  const path = `${SITE_ID}/${crypto.randomUUID()}.${ext}`;
 
-  const { error } = await supabaseAdmin.storage.from("productos").upload(path, file, {
+  const { error } = await supabaseAdmin.storage.from("product-images").upload(path, file, {
     contentType: file.type,
     upsert: false,
   });
 
   if (error) throw new Error(`No se pudo subir la imagen: ${error.message}`);
 
-  const { data } = supabaseAdmin.storage.from("productos").getPublicUrl(path);
+  const { data } = supabaseAdmin.storage.from("product-images").getPublicUrl(path);
   return data.publicUrl;
 }
 
@@ -58,6 +59,7 @@ export async function createProduct(
     const imageUrl = await uploadImageIfProvided(formData.get("image") as File | null);
 
     const { error } = await supabaseAdmin.from("products").insert({
+      site_id: SITE_ID,
       name: fields.name,
       category_id: fields.categoryId,
       unit: fields.unit,
@@ -99,7 +101,11 @@ export async function updateProduct(
     };
     if (imageUrl) update.image_url = imageUrl;
 
-    const { error } = await supabaseAdmin.from("products").update(update).eq("id", id);
+    const { error } = await supabaseAdmin
+      .from("products")
+      .update(update)
+      .eq("id", id)
+      .eq("site_id", SITE_ID);
     if (error) throw new Error(error.message);
   } catch (error) {
     return { error: error instanceof Error ? error.message : "Error inesperado." };
@@ -113,7 +119,11 @@ export async function updateProduct(
 export async function deleteProduct(id: string) {
   await requireUser();
   const supabaseAdmin = getSupabaseAdmin();
-  const { error } = await supabaseAdmin.from("products").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("products")
+    .delete()
+    .eq("id", id)
+    .eq("site_id", SITE_ID);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/productos");
   revalidatePath("/catalogo");

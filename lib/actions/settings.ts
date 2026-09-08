@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/supabase/require-user";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { SITE_ID } from "@/lib/site";
 
 export type SettingsFormState = { error: string | null; success?: boolean };
 
@@ -20,9 +21,9 @@ export async function updateSettings(
   const about_text = String(formData.get("about_text") ?? "").trim();
 
   const { error } = await supabaseAdmin
-    .from("site_settings")
+    .from("sites")
     .update({ whatsapp_number, business_hours, address, instagram_url, about_text })
-    .eq("id", 1);
+    .eq("id", SITE_ID);
 
   if (error) return { error: error.message };
 
