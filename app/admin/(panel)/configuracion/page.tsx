@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { SITE_ID } from "@/lib/site";
 import SettingsForm from "@/components/admin/SettingsForm";
 
 export const metadata: Metadata = { title: "Configuración" };
@@ -7,9 +8,9 @@ export const metadata: Metadata = { title: "Configuración" };
 export default async function AdminSettingsPage() {
   const supabaseAdmin = getSupabaseAdmin();
   const { data: settings } = await supabaseAdmin
-    .from("site_settings")
+    .from("sites")
     .select("whatsapp_number, business_hours, address, instagram_url, about_text")
-    .eq("id", 1)
+    .eq("id", SITE_ID)
     .maybeSingle();
 
   return (

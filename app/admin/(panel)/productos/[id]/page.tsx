@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { updateProduct } from "@/lib/actions/products";
+import { SITE_ID } from "@/lib/site";
 import ProductForm from "@/components/admin/ProductForm";
 
 export const metadata: Metadata = { title: "Editar producto" };
@@ -16,15 +17,18 @@ export default async function EditProductPage({
   const supabaseAdmin = getSupabaseAdmin();
 
   const [{ data: categories }, { data: product }] = await Promise.all([
-    supabaseAdmin.from("categories").select("id, name").order("sort_order"),
+    supabaseAdmin.from("categories").select("id, name").eq("site_id", SITE_ID).order("sort_order"),
     supabaseAdmin
       .from("products")
       .select("name, category_id, unit, price, in_stock, featured, image_url")
       .eq("id", id)
+      .eq("site_id", SITE_ID)
       .maybeSingle(),
   ]);
 
   if (!product) notFound();
+
+  const productForForm = { ...product, unit: product.unit ?? "" };
 
   return (
     <div>
@@ -39,7 +43,7 @@ export default async function EditProductPage({
         <ProductForm
           action={updateProduct.bind(null, id)}
           categories={categories ?? []}
-          product={product}
+          product={productForForm}
           submitLabel="Guardar cambios"
         />
       </div>

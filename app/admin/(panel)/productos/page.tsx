@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { formatPrice } from "@/lib/format";
 import { deleteProduct } from "@/lib/actions/products";
+import { SITE_ID } from "@/lib/site";
 import DeleteButton from "@/components/admin/DeleteButton";
 
 export const metadata: Metadata = { title: "Productos" };
@@ -17,11 +18,12 @@ export default async function AdminProductsPage({
   const supabaseAdmin = getSupabaseAdmin();
 
   const [{ data: categories }, productsQuery] = await Promise.all([
-    supabaseAdmin.from("categories").select("id, name").order("sort_order"),
+    supabaseAdmin.from("categories").select("id, name").eq("site_id", SITE_ID).order("sort_order"),
     (() => {
       let query = supabaseAdmin
         .from("products")
         .select("id, name, unit, price, in_stock, featured, image_url, category_id")
+        .eq("site_id", SITE_ID)
         .order("name");
       if (category) query = query.eq("category_id", category);
       if (q) query = query.ilike("name", `%${q}%`);

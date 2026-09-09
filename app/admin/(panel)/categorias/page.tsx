@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { SITE_ID } from "@/lib/site";
 import CategoryRow from "@/components/admin/CategoryRow";
 import NewCategoryForm from "@/components/admin/NewCategoryForm";
 
@@ -10,6 +11,7 @@ export default async function AdminCategoriesPage() {
   const { data: categories } = await supabaseAdmin
     .from("categories")
     .select("id, name")
+    .eq("site_id", SITE_ID)
     .order("sort_order");
 
   const list = categories ?? [];

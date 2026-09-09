@@ -1,13 +1,19 @@
 import { supabase } from "@/lib/supabase/client";
+import { SITE_ID } from "@/lib/site";
 import type { Product } from "@/lib/data/products";
 
 export async function getCatalog(): Promise<{ products: Product[]; categories: string[] }> {
   const [{ data: categoryRows, error: categoriesError }, { data: productRows, error: productsError }] =
     await Promise.all([
-      supabase.from("categories").select("id, name, sort_order").order("sort_order"),
+      supabase
+        .from("categories")
+        .select("id, name, sort_order")
+        .eq("site_id", SITE_ID)
+        .order("sort_order"),
       supabase
         .from("products")
         .select("id, name, category_id, unit, price, in_stock, image_url")
+        .eq("site_id", SITE_ID)
         .order("name"),
     ]);
 
@@ -20,7 +26,7 @@ export async function getCatalog(): Promise<{ products: Product[]; categories: s
     id: row.id,
     name: row.name,
     category: (row.category_id && categoryNameById.get(row.category_id)) || "Sin categoría",
-    unit: row.unit,
+    unit: row.unit ?? "",
     price: Number(row.price),
     inStock: row.in_stock,
     imageUrl: row.image_url,

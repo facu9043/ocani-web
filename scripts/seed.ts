@@ -15,6 +15,10 @@ import { slugify } from "../lib/slug";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// IMPORTANTE: tiendas-web es una base compartida entre varios emprendimientos
+// (site_id en categories/products). Este script solo toca las filas de este
+// sitio — nunca borra ni pisa datos de los demás.
+const siteId = process.env.NEXT_PUBLIC_SITE_ID || "ocani";
 
 if (!supabaseUrl || !serviceRoleKey) {
   console.error(
@@ -26,8 +30,9 @@ if (!supabaseUrl || !serviceRoleKey) {
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
 async function seed() {
-  console.log("Insertando categorías...");
+  console.log(`Insertando categorías (site_id=${siteId})...`);
   const categoryRows = CATEGORIES.map((name, index) => ({
+    site_id: siteId,
     name,
     slug: slugify(name),
     sort_order: index,
@@ -35,7 +40,7 @@ async function seed() {
 
   const { data: insertedCategories, error: categoriesError } = await supabase
     .from("categories")
-    .upsert(categoryRows, { onConflict: "slug" })
+    .upsert(categoryRows, { onConflict: "site_id,slug" })
     .select("id, name");
 
   if (categoriesError) throw categoriesError;
@@ -44,15 +49,16 @@ async function seed() {
     insertedCategories.map((category) => [category.name, category.id]),
   );
 
-  console.log("Vaciando tabla de productos...");
+  console.log(`Vaciando productos de este sitio (site_id=${siteId})...`);
   const { error: deleteError } = await supabase
     .from("products")
     .delete()
-    .not("id", "is", null);
+    .eq("site_id", siteId);
   if (deleteError) throw deleteError;
 
   console.log("Insertando productos...");
   const productRows = PRODUCTS.map((product) => ({
+    site_id: siteId,
     name: product.name,
     category_id: categoryIdByName.get(product.category),
     unit: product.unit,
@@ -64,8 +70,9 @@ async function seed() {
   if (productsError) throw productsError;
 
   console.log("Insertando configuración del sitio...");
-  const { error: settingsError } = await supabase.from("site_settings").upsert({
-    id: 1,
+  const { error: settingsError } = await supabase.from("sites").upsert({
+    id: siteId,
+    name: "Ocani",
     whatsapp_number: "543624158218",
     business_hours:
       "Lunes a viernes de 9:00 a 13:00 y de 16:00 a 20:00. Sábados de 10:30 a 13:30.",
