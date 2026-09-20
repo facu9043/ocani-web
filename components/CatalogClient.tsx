@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Product } from "@/lib/data/products";
 import ProductCard from "@/components/ProductCard";
+import { useTickerStore } from "@/lib/store/ticker";
 
 type CatalogClientProps = {
   products: Product[];
@@ -43,6 +44,20 @@ function sortProducts(products: Product[], sortBy: SortOption) {
 }
 
 export default function CatalogClient({ products, categories }: CatalogClientProps) {
+  const setTickerItems = useTickerStore((state) => state.setItems);
+
+  useEffect(() => {
+    const inStock = products.filter((product) => product.inStock);
+    const shuffled = [...inStock].sort(() => Math.random() - 0.5);
+    setTickerItems(
+      shuffled.slice(0, 14).map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+      })),
+    );
+  }, [products, setTickerItems]);
+
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | "Todas">("Todas");
   const [selectedUnits, setSelectedUnits] = useState<Set<string>>(new Set());

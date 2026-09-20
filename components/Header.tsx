@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/lib/store/cart";
+import { useTickerStore } from "@/lib/store/ticker";
+import ProductTicker from "@/components/ProductTicker";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
@@ -24,6 +27,9 @@ export default function Header() {
     state.items.reduce((sum, item) => sum + item.quantity, 0),
   );
   const openCart = useCartStore((state) => state.open);
+  const pathname = usePathname();
+  const tickerItems = useTickerStore((state) => state.items);
+  const showTicker = pathname === "/catalogo" && tickerItems.length > 0;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,9 +40,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-forest-dark/10 bg-cream/90 backdrop-blur-sm">
-      <div className="flex h-9 items-center justify-center bg-forest-dark px-4 text-center text-xs font-medium text-cream/90">
-        {ANNOUNCEMENTS[announcementIndex]}
-      </div>
+      {showTicker ? (
+        <ProductTicker items={tickerItems} />
+      ) : (
+        <div className="flex h-9 items-center justify-center bg-forest-dark px-4 text-center text-xs font-medium text-cream/90">
+          {ANNOUNCEMENTS[announcementIndex]}
+        </div>
+      )}
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-dark">
