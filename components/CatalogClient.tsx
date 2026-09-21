@@ -266,11 +266,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <nav className="text-sm font-semibold text-ink/60">
-        <span>Inicio</span> <span className="mx-1">›</span> <span className="text-forest-dark">Catálogo</span>
-      </nav>
-
-      <h1 className="mt-3 font-display text-3xl font-bold text-forest-dark sm:text-4xl">
+      <h1 className="font-display text-3xl font-bold text-forest-dark sm:text-4xl">
         Catálogo
       </h1>
       <p className="mt-2 max-w-xl font-semibold text-ink/70">

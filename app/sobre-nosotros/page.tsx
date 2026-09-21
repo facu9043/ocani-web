@@ -134,8 +134,10 @@ export default async function SobreNosotrosPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
       <nav className="text-sm text-ink/60">
-        <span>Inicio</span> <span className="mx-1">›</span>{" "}
-        <span className="text-forest-dark">Sobre Nosotros</span>
+        <Link href="/catalogo" className="hover:text-forest-dark">
+          Catálogo
+        </Link>{" "}
+        <span className="mx-1">›</span> <span className="text-forest-dark">Sobre Nosotros</span>
       </nav>
 
       <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:items-center">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
 import { getSiteSettings } from "@/lib/supabase/settings";
 
@@ -32,8 +33,10 @@ export default async function ContactoPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
       <nav className="text-sm text-ink/60">
-        <span>Inicio</span> <span className="mx-1">›</span>{" "}
-        <span className="text-forest-dark">Contacto</span>
+        <Link href="/catalogo" className="hover:text-forest-dark">
+          Catálogo
+        </Link>{" "}
+        <span className="mx-1">›</span> <span className="text-forest-dark">Contacto</span>
       </nav>
 
       <h1 className="mt-3 font-display text-3xl font-semibold text-forest-dark sm:text-4xl">

@@ -45,7 +45,7 @@ export default async function AdminPanelLayout({ children }: { children: ReactNo
                 Cerrar sesión
               </button>
             </form>
-            <Link href="/" className="mt-2 block text-xs text-cream/50 hover:text-cream/80">
+            <Link href="/catalogo" className="mt-2 block text-xs text-cream/50 hover:text-cream/80">
               ← Volver al sitio
             </Link>
           </div>

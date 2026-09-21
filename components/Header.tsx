@@ -9,7 +9,6 @@ import { useTickerStore } from "@/lib/store/ticker";
 import ProductTicker from "@/components/ProductTicker";
 
 const NAV_LINKS = [
-  { href: "/", label: "Inicio" },
   { href: "/catalogo", label: "Catálogo" },
   { href: "/sobre-nosotros", label: "Sobre Nosotros" },
   { href: "/contacto", label: "Contacto" },
@@ -121,7 +120,7 @@ export default function Header() {
       <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <NavVine />
         <Link
-          href="/"
+          href="/catalogo"
           className="relative z-10 flex items-center gap-2.5"
           onClick={() => setMenuOpen(false)}
         >
