@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Product } from "@/lib/data/products";
 import ProductCard from "@/components/ProductCard";
+import FeaturedSpotlight from "@/components/FeaturedSpotlight";
 import { useTickerStore } from "@/lib/store/ticker";
 
 type CatalogClientProps = {
@@ -276,6 +277,10 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
         Precios mayoristas a partir de 1 kg por producto o bulto cerrado. Filtrá por
         categoría, presentación o precio para encontrar lo que necesitás.
       </p>
+
+      <div className="mt-6">
+        <FeaturedSpotlight products={products} />
+      </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <input
