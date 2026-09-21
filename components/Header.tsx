@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type CSSProperties } from "react";
 import { useCartStore } from "@/lib/store/cart";
@@ -103,9 +104,14 @@ export default function Header() {
           className="relative z-10 flex items-center gap-2.5"
           onClick={() => setMenuOpen(false)}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-dark">
-            <span className="font-display text-lg font-semibold text-gold">O</span>
-          </span>
+          <Image
+            src="/logo.png"
+            alt="Ocani"
+            width={40}
+            height={40}
+            className="h-10 w-10 rounded-full"
+            priority
+          />
           <span className="font-display text-xl font-semibold tracking-tight text-forest-dark">
             Ocani
           </span>
