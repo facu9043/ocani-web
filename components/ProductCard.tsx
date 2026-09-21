@@ -17,6 +17,7 @@ export default function ProductCard({ product }: { product: Product }) {
       name: product.name,
       unit: product.unit,
       price: product.price,
+      imageUrl: product.imageUrl,
     });
     openCart();
     setJustAdded(true);
@@ -53,30 +54,30 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
 
         {!product.inStock && (
-          <span className="absolute top-3 left-3 rounded-full bg-forest-dark px-2.5 py-1 text-[11px] font-semibold text-cream">
+          <span className="absolute top-3 left-3 rounded-full bg-forest-dark px-2.5 py-1 text-[11px] font-bold text-cream">
             Sin stock
           </span>
         )}
       </div>
 
       <div className="flex flex-1 flex-col gap-1.5 p-4">
-        <span className="text-xs font-semibold tracking-wide text-forest uppercase">
+        <span className="text-xs font-bold tracking-wide text-forest uppercase">
           {product.category}
         </span>
-        <h3 className="font-display text-base leading-snug font-semibold text-forest-dark">
+        <h3 className="font-display text-base leading-snug font-bold text-forest-dark">
           {product.name}
         </h3>
-        <span className="text-sm text-ink/60">{product.unit}</span>
+        <span className="text-sm font-semibold text-ink/60">{product.unit}</span>
 
         <div className="mt-2 flex items-center justify-between gap-2">
-          <span className="text-lg font-semibold text-rust">{formatPrice(product.price)}</span>
+          <span className="text-lg font-bold text-rust">{formatPrice(product.price)}</span>
         </div>
 
         <button
           type="button"
           disabled={!product.inStock}
           onClick={handleAdd}
-          className="mt-2 rounded-xl bg-forest-dark px-4 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-forest disabled:cursor-not-allowed disabled:bg-forest-dark/30 disabled:text-cream/70"
+          className="mt-2 rounded-xl bg-forest-dark px-4 py-2.5 text-sm font-bold text-cream transition-colors hover:bg-forest disabled:cursor-not-allowed disabled:bg-forest-dark/30 disabled:text-cream/70"
         >
           {!product.inStock ? "Sin stock" : justAdded ? "Agregado ✓" : "Agregar al carrito"}
         </button>

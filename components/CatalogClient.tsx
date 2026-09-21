@@ -152,20 +152,20 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
   const filters = (
     <div className="space-y-8">
       <div>
-        <h3 className="font-display text-base font-semibold text-forest-dark">Categorías</h3>
+        <h3 className="font-display text-base font-bold text-forest-dark">Categorías</h3>
         <ul className="mt-3 space-y-1">
           <li>
             <button
               type="button"
               onClick={() => setSelectedCategory("Todas")}
-              className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors ${
+              className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-sm font-semibold transition-colors ${
                 selectedCategory === "Todas"
                   ? "bg-forest-dark text-cream"
                   : "text-ink/80 hover:bg-sage"
               }`}
             >
               Todas
-              <span className="text-xs opacity-70">{products.length}</span>
+              <span className="text-xs font-semibold opacity-70">{products.length}</span>
             </button>
           </li>
           {categories.map((category) => (
@@ -173,14 +173,14 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
               <button
                 type="button"
                 onClick={() => setSelectedCategory(category)}
-                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors ${
+                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-sm font-semibold transition-colors ${
                   selectedCategory === category
                     ? "bg-forest-dark text-cream"
                     : "text-ink/80 hover:bg-sage"
                 }`}
               >
                 {category}
-                <span className="text-xs opacity-70">{categoryCounts.get(category) ?? 0}</span>
+                <span className="text-xs font-semibold opacity-70">{categoryCounts.get(category) ?? 0}</span>
               </button>
             </li>
           ))}
@@ -188,11 +188,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
       </div>
 
       <div>
-        <h3 className="font-display text-base font-semibold text-forest-dark">Presentación</h3>
+        <h3 className="font-display text-base font-bold text-forest-dark">Presentación</h3>
         <ul className="mt-3 space-y-2">
           {unitOptions.map(([unit, count]) => (
             <li key={unit}>
-              <label className="flex cursor-pointer items-center justify-between gap-2 text-sm text-ink/80">
+              <label className="flex cursor-pointer items-center justify-between gap-2 text-sm font-semibold text-ink/80">
                 <span className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -202,7 +202,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
                   />
                   {unit}
                 </span>
-                <span className="text-xs opacity-60">({count})</span>
+                <span className="text-xs font-semibold opacity-60">({count})</span>
               </label>
             </li>
           ))}
@@ -210,7 +210,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
       </div>
 
       <div>
-        <h3 className="font-display text-base font-semibold text-forest-dark">Precio</h3>
+        <h3 className="font-display text-base font-bold text-forest-dark">Precio</h3>
         <div className="mt-3 flex items-center gap-2">
           <input
             type="number"
@@ -233,15 +233,15 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
         <button
           type="button"
           onClick={applyPriceRange}
-          className="mt-2.5 w-full rounded-lg border border-forest-dark/20 bg-sage px-3 py-1.5 text-sm font-semibold text-forest-dark transition-colors hover:bg-forest-dark hover:text-cream"
+          className="mt-2.5 w-full rounded-lg border border-forest-dark/20 bg-sage px-3 py-1.5 text-sm font-bold text-forest-dark transition-colors hover:bg-forest-dark hover:text-cream"
         >
           Aplicar
         </button>
       </div>
 
       <div>
-        <h3 className="font-display text-base font-semibold text-forest-dark">Disponibilidad</h3>
-        <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm text-ink/80">
+        <h3 className="font-display text-base font-bold text-forest-dark">Disponibilidad</h3>
+        <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm font-semibold text-ink/80">
           <input
             type="checkbox"
             checked={onlyInStock}
@@ -256,7 +256,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
         <button
           type="button"
           onClick={clearFilters}
-          className="text-sm font-semibold text-rust hover:underline"
+          className="text-sm font-bold text-rust hover:underline"
         >
           Limpiar filtros
         </button>
@@ -266,14 +266,14 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <nav className="text-sm text-ink/60">
+      <nav className="text-sm font-semibold text-ink/60">
         <span>Inicio</span> <span className="mx-1">›</span> <span className="text-forest-dark">Catálogo</span>
       </nav>
 
-      <h1 className="mt-3 font-display text-3xl font-semibold text-forest-dark sm:text-4xl">
+      <h1 className="mt-3 font-display text-3xl font-bold text-forest-dark sm:text-4xl">
         Catálogo
       </h1>
-      <p className="mt-2 max-w-xl text-ink/70">
+      <p className="mt-2 max-w-xl font-semibold text-ink/70">
         Precios mayoristas a partir de 1 kg por producto o bulto cerrado. Filtrá por
         categoría, presentación o precio para encontrar lo que necesitás.
       </p>
@@ -295,7 +295,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
           <button
             type="button"
             onClick={() => setMobileFiltersOpen((open) => !open)}
-            className="rounded-xl border border-forest-dark/20 bg-cream px-4 py-2.5 text-sm font-semibold text-forest-dark lg:hidden"
+            className="rounded-xl border border-forest-dark/20 bg-cream px-4 py-2.5 text-sm font-bold text-forest-dark lg:hidden"
           >
             Filtros {hasActiveFilters ? "•" : ""}
           </button>
@@ -303,7 +303,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value as SortOption)}
-            className="rounded-xl border border-forest-dark/20 bg-cream px-4 py-2.5 text-sm font-semibold text-forest-dark focus:border-forest focus:outline-none"
+            className="rounded-xl border border-forest-dark/20 bg-cream px-4 py-2.5 text-sm font-bold text-forest-dark focus:border-forest focus:outline-none"
           >
             {Object.entries(SORT_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
@@ -324,20 +324,20 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
         <aside className="hidden lg:block">{filters}</aside>
 
         <div>
-          <p className="mb-4 text-sm text-ink/60">
+          <p className="mb-4 text-sm font-bold text-ink/60">
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "producto encontrado" : "productos encontrados"}
           </p>
 
           {filteredProducts.length === 0 ? (
             <div className="rounded-2xl border border-forest-dark/10 bg-sage/40 p-10 text-center">
-              <p className="font-display text-lg font-semibold text-forest-dark">
+              <p className="font-display text-lg font-bold text-forest-dark">
                 No encontramos productos con esos filtros
               </p>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="mt-3 text-sm font-semibold text-forest hover:underline"
+                className="mt-3 text-sm font-bold text-forest hover:underline"
               >
                 Limpiar filtros
               </button>

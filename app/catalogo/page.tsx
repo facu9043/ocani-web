@@ -26,10 +26,10 @@ export default async function CatalogoPage() {
   if (!catalog) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
-        <h1 className="font-display text-2xl font-semibold text-forest-dark">
+        <h1 className="font-display text-2xl font-bold text-forest-dark">
           No pudimos cargar el catálogo
         </h1>
-        <p className="mt-2 text-ink/70">
+        <p className="mt-2 font-semibold text-ink/70">
           Probá recargar la página en unos minutos o escribinos por WhatsApp.
         </p>
       </div>

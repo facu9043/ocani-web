@@ -34,6 +34,7 @@ export default function FeaturedSpotlight({ products }: { products: Product[] })
       name: product.name,
       unit: product.unit,
       price: product.price,
+      imageUrl: product.imageUrl,
     });
     openCart();
   }
@@ -41,7 +42,7 @@ export default function FeaturedSpotlight({ products }: { products: Product[] })
   return (
     <div className="overflow-hidden rounded-2xl border border-forest-dark/10 bg-sage">
       <div className="flex items-center gap-4 p-4 sm:p-5">
-        <span className="hidden shrink-0 rounded-full bg-forest-dark px-3 py-1.5 text-xs font-semibold tracking-wide text-cream uppercase sm:inline-block">
+        <span className="hidden shrink-0 rounded-full bg-forest-dark px-3 py-1.5 text-xs font-bold tracking-wide text-cream uppercase sm:inline-block">
           Destacados
         </span>
 
@@ -56,18 +57,18 @@ export default function FeaturedSpotlight({ products }: { products: Product[] })
             />
           </div>
           <div className="min-w-0 flex-1">
-            <span className="inline-block rounded-full bg-forest-dark px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-cream uppercase sm:hidden">
+            <span className="inline-block rounded-full bg-forest-dark px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-cream uppercase sm:hidden">
               Destacados
             </span>
-            <p className="mt-1 truncate font-display text-base font-semibold text-forest-dark sm:mt-0 sm:text-lg">
+            <p className="mt-1 truncate font-display text-base font-bold text-forest-dark sm:mt-0 sm:text-lg">
               {product.name}
             </p>
-            <p className="text-sm font-semibold text-rust">{formatPrice(product.price)}</p>
+            <p className="text-sm font-bold text-rust">{formatPrice(product.price)}</p>
           </div>
           <button
             type="button"
             onClick={handleAdd}
-            className="shrink-0 rounded-xl bg-forest-dark px-4 py-2.5 text-xs font-semibold text-cream transition-colors hover:bg-forest sm:text-sm"
+            className="shrink-0 rounded-xl bg-forest-dark px-4 py-2.5 text-xs font-bold text-cream transition-colors hover:bg-forest sm:text-sm"
           >
             Agregar
           </button>
