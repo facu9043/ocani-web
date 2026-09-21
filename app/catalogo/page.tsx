@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CatalogClient from "@/components/CatalogClient";
+import CatalogBackdrop from "@/components/CatalogBackdrop";
 import { getCatalog } from "@/lib/supabase/catalog";
 
 export const revalidate = 60;
@@ -35,5 +36,10 @@ export default async function CatalogoPage() {
     );
   }
 
-  return <CatalogClient products={catalog.products} categories={catalog.categories} />;
+  return (
+    <div className="relative">
+      <CatalogBackdrop />
+      <CatalogClient products={catalog.products} categories={catalog.categories} />
+    </div>
+  );
 }

@@ -20,6 +20,41 @@ const ANNOUNCEMENTS = [
   "Pedidos por WhatsApp",
 ];
 
+const VINE_LEAVES = [
+  [37.5, 3, -20],
+  [112.5, 29, 20],
+  [187.5, 3, -20],
+  [262.5, 29, 20],
+  [337.5, 3, -20],
+] as const;
+
+function NavVine() {
+  return (
+    <svg
+      viewBox="0 0 400 32"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 h-full w-full text-forest-light/60"
+    >
+      <path
+        d="M0 16 Q 37.5 2 75 16 T 150 16 T 225 16 T 300 16 T 375 16 T 400 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+      />
+      {VINE_LEAVES.map(([x, y, rotate]) => (
+        <path
+          key={x}
+          d="M0 0c4.5 -3.2 10 -3.2 13 0c-3 4.2 -10 4.2 -13 0Z"
+          fill="currentColor"
+          transform={`translate(${x} ${y}) rotate(${rotate})`}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [announcementIndex, setAnnouncementIndex] = useState(0);
@@ -57,12 +92,13 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="relative hidden items-center gap-8 md:flex">
+          <NavVine />
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-ink transition-colors hover:text-forest"
+              className="relative text-sm font-medium text-ink transition-colors hover:text-forest"
             >
               {link.label}
             </Link>
