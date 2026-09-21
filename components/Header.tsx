@@ -78,7 +78,7 @@ export default function Header() {
   const openCart = useCartStore((state) => state.open);
   const pathname = usePathname();
   const tickerItems = useTickerStore((state) => state.items);
-  const showTicker = pathname === "/catalogo" && tickerItems.length > 0;
+  const showTicker = tickerItems.length > 0;
 
   const navRef = useRef<HTMLElement>(null);
   const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());

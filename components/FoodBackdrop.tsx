@@ -24,32 +24,37 @@ const IMAGES = [
 const SIZES = [90, 70, 56, 82, 64, 48, 76];
 const INSETS = [1, 5, 9, 3, 7, 2, 10, 4];
 
-// Posiciones relativas al alto total de la página del catálogo (no del
+// Posiciones relativas al alto total de la página que lo use (no del
 // viewport) para que se distribuyan a lo largo de todo el scroll y también
-// asomen entre los márgenes y huecos del grid de productos, no solo arriba.
-// Generado en vez de escrito a mano para poder tener muchos más sin que el
+// asomen entre los márgenes y huecos del contenido, no solo arriba.
+// Generado en vez de escrito a mano para poder tener muchos sin que el
 // archivo se vuelva una lista interminable de números repetidos.
-const ITEM_COUNT = 26;
+function buildItems(count: number): Item[] {
+  return Array.from({ length: count }, (_, index) => {
+    const onLeft = index % 2 === 0;
+    const inset = INSETS[index % INSETS.length];
+    return {
+      src: IMAGES[index % IMAGES.length],
+      alt: "",
+      top: `${Math.round((index / count) * 100)}%`,
+      left: onLeft ? `${inset}%` : `${100 - inset}%`,
+      size: SIZES[index % SIZES.length],
+      rotate: (index % 2 === 0 ? -1 : 1) * (6 + ((index * 7) % 14)),
+      duration: 6 + ((index * 3) % 7) * 0.5,
+      delay: (index % 8) * 0.2,
+    };
+  });
+}
 
-const ITEMS: Item[] = Array.from({ length: ITEM_COUNT }, (_, index) => {
-  const onLeft = index % 2 === 0;
-  const inset = INSETS[index % INSETS.length];
-  return {
-    src: IMAGES[index % IMAGES.length],
-    alt: "",
-    top: `${Math.round((index / ITEM_COUNT) * 100)}%`,
-    left: onLeft ? `${inset}%` : `${100 - inset}%`,
-    size: SIZES[index % SIZES.length],
-    rotate: (index % 2 === 0 ? -1 : 1) * (6 + ((index * 7) % 14)),
-    duration: 6 + ((index * 3) % 7) * 0.5,
-    delay: (index % 8) * 0.2,
-  };
-});
-
-export default function CatalogBackdrop() {
+// `count` se ajusta según qué tan larga es la página que lo usa: el
+// catálogo (scroll muy largo, con el grid de productos) necesita muchos más
+// para no quedar vacío, mientras que Sobre Nosotros/Contacto son páginas
+// cortas donde el mismo número se vería amontonado.
+export default function FoodBackdrop({ count = 26 }: { count?: number }) {
+  const items = buildItems(count);
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-      {ITEMS.map(({ src, alt, top, left, size, rotate, duration, delay }, index) => {
+      {items.map(({ src, alt, top, left, size, rotate, duration, delay }, index) => {
         const style: CSSProperties = {
           position: "absolute",
           top,
