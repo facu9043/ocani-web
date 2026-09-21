@@ -136,9 +136,6 @@ export default function Header() {
           <span className="font-display text-xl font-semibold tracking-tight text-forest-dark">
             Ocani
           </span>
-          <span aria-hidden="true" className="-ml-1 -translate-y-2 rotate-[18deg] text-lg">
-            🍎
-          </span>
         </Link>
 
         <nav ref={navRef} className="relative z-10 hidden items-center gap-8 md:flex">
@@ -158,11 +155,20 @@ export default function Header() {
             </Link>
           ))}
           {indicator && (
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -bottom-1.5 h-[3px] rounded-full bg-gold transition-all duration-300 ease-out"
-              style={{ left: indicator.left, width: indicator.width }}
-            />
+            <>
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-1.5 h-[3px] rounded-full bg-gold transition-all duration-300 ease-out"
+                style={{ left: indicator.left, width: indicator.width }}
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-4 text-base transition-all duration-300 ease-out"
+                style={{ left: indicator.left + indicator.width / 2 }}
+              >
+                <span className="block -translate-x-1/2 rotate-[-12deg]">🍎</span>
+              </span>
+            </>
           )}
         </nav>
 
@@ -223,7 +229,14 @@ export default function Header() {
                   isActive ? "text-forest-dark" : "text-ink"
                 }`}
               >
-                {link.label}
+                <span className="flex items-center gap-1.5">
+                  {isActive && (
+                    <span aria-hidden="true" className="text-sm">
+                      🍎
+                    </span>
+                  )}
+                  {link.label}
+                </span>
                 <span
                   aria-hidden="true"
                   className={`mt-1 h-[3px] rounded-full bg-gold transition-all duration-300 ${
