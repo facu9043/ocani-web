@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useTickerStore } from "@/lib/store/ticker";
 import ProductTicker from "@/components/ProductTicker";
@@ -20,36 +20,50 @@ const ANNOUNCEMENTS = [
   "Pedidos por WhatsApp",
 ];
 
+// Hojas a lo largo de la enredadera: [x, y, rotación, tono]
 const VINE_LEAVES = [
-  [37.5, 3, -20],
-  [112.5, 29, 20],
-  [187.5, 3, -20],
-  [262.5, 29, 20],
-  [337.5, 3, -20],
+  [75, 12, -35, "forest"],
+  [225, 52, 35, "gold"],
+  [375, 12, -35, "forest"],
+  [525, 52, 35, "gold"],
+  [675, 12, -35, "forest"],
+  [825, 52, 35, "gold"],
+  [975, 12, -35, "forest"],
+  [1125, 52, 35, "gold"],
 ] as const;
 
 function NavVine() {
   return (
     <svg
-      viewBox="0 0 400 32"
+      viewBox="0 0 1200 64"
       preserveAspectRatio="none"
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 h-full w-full text-forest-light/60"
+      className="pointer-events-none absolute inset-0 h-full w-full"
     >
       <path
-        d="M0 16 Q 37.5 2 75 16 T 150 16 T 225 16 T 300 16 T 375 16 T 400 16"
+        className="vine-stem text-forest"
+        d="M0 32 Q 75 10 150 32 T 300 32 T 450 32 T 600 32 T 750 32 T 900 32 T 1050 32 T 1200 32"
         fill="none"
         stroke="currentColor"
-        strokeWidth={1.5}
+        strokeWidth={2.5}
         strokeLinecap="round"
+        pathLength={1}
       />
-      {VINE_LEAVES.map(([x, y, rotate]) => (
-        <path
-          key={x}
-          d="M0 0c4.5 -3.2 10 -3.2 13 0c-3 4.2 -10 4.2 -13 0Z"
-          fill="currentColor"
-          transform={`translate(${x} ${y}) rotate(${rotate})`}
-        />
+      {VINE_LEAVES.map(([x, y, rotate, tone], index) => (
+        <g key={x} transform={`translate(${x} ${y})`}>
+          <path
+            className={`vine-leaf ${tone === "gold" ? "text-gold" : "text-forest-light"}`}
+            style={
+              {
+                animationDelay: `${1.6 + index * 0.12}s`,
+                transformOrigin: "9px 0px",
+                "--leaf-rotate": `${rotate}deg`,
+              } as CSSProperties
+            }
+            d="M0 0c3 -9 15 -9 18 0c-3 9 -15 9 -18 0Z"
+            fill="currentColor"
+          />
+        </g>
       ))}
     </svg>
   );
@@ -82,8 +96,13 @@ export default function Header() {
           {ANNOUNCEMENTS[announcementIndex]}
         </div>
       )}
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
+      <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+        <NavVine />
+        <Link
+          href="/"
+          className="relative z-10 flex items-center gap-2.5"
+          onClick={() => setMenuOpen(false)}
+        >
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-forest-dark">
             <span className="font-display text-lg font-semibold text-gold">O</span>
           </span>
@@ -92,20 +111,19 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="relative hidden items-center gap-8 md:flex">
-          <NavVine />
+        <nav className="relative z-10 hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="relative text-sm font-medium text-ink transition-colors hover:text-forest"
+              className="rounded-md bg-cream/80 px-1 text-sm font-medium text-ink transition-colors hover:text-forest"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-3">
           <button
             type="button"
             aria-label="Ver carrito"
