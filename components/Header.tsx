@@ -33,9 +33,6 @@ const VINE_LEAVES = [
   [1125, 52, 35, "gold"],
 ] as const;
 
-// Frutitos donde el tallo cruza la línea base, entre hoja y hoja.
-const VINE_FRUITS = [150, 450, 750, 1050] as const;
-
 function NavVine() {
   return (
     <svg
@@ -66,35 +63,6 @@ function NavVine() {
             }
             d="M0 0c3 -9 15 -9 18 0c-3 9 -15 9 -18 0Z"
             fill="currentColor"
-          />
-        </g>
-      ))}
-      {VINE_FRUITS.map((x, index) => (
-        <g key={`fruit-${x}`} transform={`translate(${x} 32)`}>
-          <path
-            className="vine-leaf text-rust"
-            style={
-              {
-                animationDelay: `${2.4 + index * 0.15}s`,
-                transformOrigin: "0px 4px",
-              } as CSSProperties
-            }
-            d="M-6 1c-1 -5 2 -8 6 -8c4 0 7 3 6 8c-1 6 -5 9 -6 9c-1 0 -5 -3 -6 -9Z"
-            fill="currentColor"
-          />
-          <path
-            className="vine-leaf text-forest-dark"
-            style={
-              {
-                animationDelay: `${2.4 + index * 0.15}s`,
-                transformOrigin: "0px 4px",
-              } as CSSProperties
-            }
-            d="M0 -7v-3"
-            stroke="currentColor"
-            strokeWidth={1.2}
-            strokeLinecap="round"
-            fill="none"
           />
         </g>
       ))}
@@ -167,6 +135,9 @@ export default function Header() {
           />
           <span className="font-display text-xl font-semibold tracking-tight text-forest-dark">
             Ocani
+          </span>
+          <span aria-hidden="true" className="-ml-1 -translate-y-2 rotate-[18deg] text-lg">
+            🍎
           </span>
         </Link>
 
