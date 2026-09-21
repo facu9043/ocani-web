@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useTickerStore } from "@/lib/store/ticker";
 import ProductTicker from "@/components/ProductTicker";
@@ -81,12 +81,33 @@ export default function Header() {
   const tickerItems = useTickerStore((state) => state.items);
   const showTicker = pathname === "/catalogo" && tickerItems.length > 0;
 
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
+  const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setAnnouncementIndex((index) => (index + 1) % ANNOUNCEMENTS.length);
     }, 3500);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    function measure() {
+      const nav = navRef.current;
+      const activeLink = linkRefs.current.get(pathname);
+      if (!nav || !activeLink) {
+        setIndicator(null);
+        return;
+      }
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      setIndicator({ left: linkRect.left - navRect.left, width: linkRect.width });
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-forest-dark/10 bg-cream/90 backdrop-blur-sm">
@@ -117,16 +138,29 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="relative z-10 hidden items-center gap-8 md:flex">
+        <nav ref={navRef} className="relative z-10 hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-md bg-cream/80 px-1 text-sm font-medium text-ink transition-colors hover:text-forest"
+              ref={(el) => {
+                if (el) linkRefs.current.set(link.href, el);
+                else linkRefs.current.delete(link.href);
+              }}
+              className={`rounded-md bg-cream/80 px-1 text-sm font-medium transition-colors hover:text-forest ${
+                pathname === link.href ? "text-forest-dark" : "text-ink"
+              }`}
             >
               {link.label}
             </Link>
           ))}
+          {indicator && (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-1.5 h-[3px] rounded-full bg-gold transition-all duration-300 ease-out"
+              style={{ left: indicator.left, width: indicator.width }}
+            />
+          )}
         </nav>
 
         <div className="relative z-10 flex items-center gap-3">
@@ -175,16 +209,27 @@ export default function Header() {
 
       {menuOpen && (
         <nav className="flex flex-col gap-1 border-t border-forest-dark/10 bg-cream px-4 pb-4 pt-2 md:hidden">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-sage hover:text-forest-dark"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`flex flex-col rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-sage hover:text-forest-dark ${
+                  isActive ? "text-forest-dark" : "text-ink"
+                }`}
+              >
+                {link.label}
+                <span
+                  aria-hidden="true"
+                  className={`mt-1 h-[3px] rounded-full bg-gold transition-all duration-300 ${
+                    isActive ? "w-6 opacity-100" : "w-0 opacity-0"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
       )}
     </header>
