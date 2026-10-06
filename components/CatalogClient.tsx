@@ -47,7 +47,6 @@ function sortProducts(products: Product[], sortBy: SortOption) {
 export default function CatalogClient({ products, categories }: CatalogClientProps) {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | "Todas">("Todas");
-  const [selectedUnits, setSelectedUnits] = useState<Set<string>>(new Set());
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [priceMinInput, setPriceMinInput] = useState("");
   const [priceMaxInput, setPriceMaxInput] = useState("");
@@ -74,20 +73,11 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
     [products, selectedCategory],
   );
 
-  const unitOptions = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const product of productsInCategory) {
-      counts.set(product.unit, (counts.get(product.unit) ?? 0) + 1);
-    }
-    return Array.from(counts.entries()).sort((a, b) => a[0].localeCompare(b[0], "es"));
-  }, [productsInCategory]);
-
   const filteredProducts = useMemo(() => {
     const query = normalize(search.trim());
 
     const filtered = productsInCategory.filter((product) => {
       if (query && !normalize(product.name).includes(query)) return false;
-      if (selectedUnits.size > 0 && !selectedUnits.has(product.unit)) return false;
       if (onlyInStock && !product.inStock) return false;
       if (appliedPrice.min !== null && product.price < appliedPrice.min) return false;
       if (appliedPrice.max !== null && product.price > appliedPrice.max) return false;
@@ -95,19 +85,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
     });
 
     return sortProducts(filtered, sortBy);
-  }, [productsInCategory, search, selectedUnits, onlyInStock, appliedPrice, sortBy]);
-
-  function toggleUnit(unit: string) {
-    setSelectedUnits((current) => {
-      const next = new Set(current);
-      if (next.has(unit)) {
-        next.delete(unit);
-      } else {
-        next.add(unit);
-      }
-      return next;
-    });
-  }
+  }, [productsInCategory, search, onlyInStock, appliedPrice, sortBy]);
 
   function applyPriceRange() {
     const min = priceMinInput.trim() === "" ? null : Number(priceMinInput);
@@ -120,7 +98,6 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
 
   function clearFilters() {
     setSelectedCategory("Todas");
-    setSelectedUnits(new Set());
     setOnlyInStock(false);
     setPriceMinInput("");
     setPriceMaxInput("");
@@ -130,7 +107,6 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
 
   const hasActiveFilters =
     selectedCategory !== "Todas" ||
-    selectedUnits.size > 0 ||
     onlyInStock ||
     appliedPrice.min !== null ||
     appliedPrice.max !== null;
@@ -168,28 +144,6 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
                 {category}
                 <span className="text-xs font-semibold opacity-70">{categoryCounts.get(category) ?? 0}</span>
               </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="font-display text-base font-bold text-forest-dark">Presentación</h3>
-        <ul className="mt-3 space-y-2">
-          {unitOptions.map(([unit, count]) => (
-            <li key={unit}>
-              <label className="flex cursor-pointer items-center justify-between gap-2 text-sm font-semibold text-ink/80">
-                <span className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedUnits.has(unit)}
-                    onChange={() => toggleUnit(unit)}
-                    className="h-4 w-4 rounded border-forest-dark/30 text-forest-dark accent-forest-dark"
-                  />
-                  {unit}
-                </span>
-                <span className="text-xs font-semibold opacity-60">({count})</span>
-              </label>
             </li>
           ))}
         </ul>
@@ -258,7 +212,7 @@ export default function CatalogClient({ products, categories }: CatalogClientPro
       </h1>
       <p className="mt-2 max-w-xl font-semibold text-ink/70">
         Precios mayoristas a partir de 1 kg por producto o bulto cerrado. Filtrá por
-        categoría, presentación o precio para encontrar lo que necesitás.
+        categoría o precio para encontrar lo que necesitás.
       </p>
 
       <div className="mt-6">
