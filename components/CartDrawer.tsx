@@ -3,6 +3,12 @@
 import Image from "next/image";
 import { useCartStore } from "@/lib/store/cart";
 import { formatPrice } from "@/lib/format";
+import {
+  AddToCartIllustration,
+  CheckoutIllustration,
+  DeliveryIllustration,
+  SendMessageIllustration,
+} from "@/components/HowToBuyIllustrations";
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "543624158218";
 
@@ -35,6 +41,71 @@ function WhatsAppIcon() {
     <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
       <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.24-.64.8-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.24-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.17 1.74 2.65 4.21 3.72.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.17-.48-.29Z" />
     </svg>
+  );
+}
+
+const HOW_TO_BUY_STEPS = [
+  { text: "Agregá los productos al carrito", Illustration: AddToCartIllustration },
+  {
+    text: "Tocá “Finalizar pedido”: se abre WhatsApp con tu pedido armado",
+    Illustration: CheckoutIllustration,
+  },
+  { text: "Envianos el mensaje con tu nombre y localidad", Illustration: SendMessageIllustration },
+  {
+    text: "Te respondemos por WhatsApp para coordinar el envío y el pago",
+    Illustration: DeliveryIllustration,
+  },
+];
+
+function HowToBuy({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  return (
+    <details
+      open={defaultOpen}
+      className="group rounded-2xl border border-forest/25 bg-sage/40 text-left"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-2.5 text-sm font-semibold text-forest-dark [&::-webkit-details-marker]:hidden">
+        <span className="flex items-center gap-2">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.75}
+            className="h-4 w-4 text-forest"
+            aria-hidden="true"
+          >
+            <circle cx={12} cy={12} r={9} />
+            <path strokeLinecap="round" d="M12 11v5M12 7.5h.01" />
+          </svg>
+          ¿Cómo compro?
+        </span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          className="h-4 w-4 text-forest transition-transform group-open:rotate-180"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+        </svg>
+      </summary>
+
+      <ol role="list" className="space-y-3 border-t border-dashed border-forest/25 px-4 pt-3.5 pb-4">
+        {HOW_TO_BUY_STEPS.map(({ text, Illustration }, index) => (
+          <li key={text} className="flex items-center gap-3.5">
+            <span className="relative grid h-14 w-14 shrink-0 place-items-center rounded-[14px] bg-[linear-gradient(160deg,#fffdf0_0%,var(--color-cream)_55%,#f6f0cf_100%)] shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_0_0_1px_rgb(96_108_56/0.12),0_6px_14px_-6px_rgb(58_46_28/0.28),0_2px_4px_-2px_rgb(58_46_28/0.12)]">
+              <Illustration className="block h-[50px] w-[50px]" />
+              <span
+                aria-hidden="true"
+                className="absolute -top-2.5 -left-2.5 grid h-4.5 w-4.5 place-items-center rounded-full bg-gold text-[10px] font-extrabold text-forest-dark shadow-[0_0_0_2px_#f4f0d0]">
+                {index + 1}
+              </span>
+            </span>
+            <span className="text-xs leading-snug text-ink/80">{text}</span>
+          </li>
+        ))}
+      </ol>
+    </details>
   );
 }
 
@@ -83,7 +154,7 @@ export default function CartDrawer() {
         className="absolute inset-0 bg-forest-dark/40"
       />
 
-      <div className="absolute top-0 right-0 flex h-full w-full max-w-md flex-col bg-cream shadow-xl sm:max-w-sm">
+      <div className="absolute top-0 right-0 flex h-full w-full max-w-md flex-col overflow-y-auto bg-cream shadow-xl sm:max-w-sm">
         <div className="flex items-center justify-between gap-3 px-5 pt-5 pb-3">
           <div className="flex items-center gap-2.5">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-forest">
@@ -120,11 +191,12 @@ export default function CartDrawer() {
           <LeafDivider />
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-2">
+        <div className="min-h-40 flex-1 overflow-y-auto px-5 py-2">
           {items.length === 0 ? (
-            <p className="mt-8 text-center text-sm text-ink/60">
-              Todavía no agregaste productos.
-            </p>
+            <div className="mt-8 space-y-6">
+              <p className="text-center text-sm text-ink/60">Todavía no agregaste productos.</p>
+              <HowToBuy defaultOpen />
+            </div>
           ) : (
             <ul className="space-y-3 py-2">
               {items.map((item) => (
@@ -226,6 +298,10 @@ export default function CartDrawer() {
             <div className="mt-1 flex items-center justify-between text-sm">
               <span className="text-ink/70">Envío</span>
               <span className="font-semibold text-forest">A coordinar por WhatsApp</span>
+            </div>
+
+            <div className="mt-4">
+              <HowToBuy />
             </div>
 
             <button
